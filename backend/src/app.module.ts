@@ -6,11 +6,7 @@ import { AppModules } from './modules';
 
 @Module({
   imports: [
-    MongooseModule.forRootAsync({
-      useFactory: () => ({
-        uri: 'mongodb://localhost:27017/mydatabase',
-      }),
-    }),
+    MongooseModule.forRoot('mongodb://localhost:27017/mydatabase'),
     ...AppModules,
   ],
   controllers: [AppController],
