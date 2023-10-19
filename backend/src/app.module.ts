@@ -1,12 +1,18 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
-import { CategoriesModule } from './categories/categories.module';
+import { MongooseModule } from '@nestjs/mongoose';
+import { AppModules } from './modules';
 
 @Module({
-  imports: [AuthModule, UsersModule, CategoriesModule],
+  imports: [
+    MongooseModule.forRootAsync({
+      useFactory: () => ({
+        uri: 'mongodb://localhost:27017/mydatabase',
+      }),
+    }),
+    ...AppModules,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -3,26 +3,42 @@ version: '3'
 services:
 
   mongodb:
-    image: mongo:4.2
+    image: mongo:6.0
     volumes:
       - mongodata:/data/db
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=password
+    ports:
+      - 27017:27017
+    command: ['--auth']
 
   mongoexpress:
     image: mongo-express
     ports:
-      - 8081:8081
+      - 8080:8081
     environment:
       - ME_CONFIG_MONGODB_ADMINUSERNAME=root
       - ME_CONFIG_MONGODB_ADMINPASSWORD=password
+      # - ME_CONFIG_MONGODB_SERVER=mydatabase
       - ME_CONFIG_MONGODB_URL=mongodb://root:password@mongodb:27017/
+      - ME_CONFIG_MONGODB_ADMINAUTH=true
+      - ME_CONFIG_BASICAUTH_USERNAME=root
+      - ME_CONFIG_BASICAUTH_PASSWORD=password
 
   redis:
     image: redis:alpine
     volumes:
       - redisdata:/data
+    # ports:
+    #  - 6379:6379 
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    environment:
+      - REDIS_HOSTS=redis
+    ports:
+      - 8081:8081
 
 volumes:
   mongodata:
